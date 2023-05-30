@@ -13,17 +13,18 @@ Python code for the paper ..... by **Katy Craig**, **Karthik Elamvazhuthi**, and
 - `KE` calculates the kinetic energy using **velocity** of the trajectories.
 - `KE_acc` uses the **acceleration** of trajectories.
 - Use `NLE` to calcualte the non-local energy term (without $m_1^2$, so this may be negative) when the target distribution is an empirical distribution. We assume equal weights per particle, but that should be easily modifiable if you need to.
-- `NLE_gauss` is the contiuum Gaussian distribution version of `NLE`.
 - `NLE_acc` is for the acceleration control example. It needs special treatment to deal with position and velocity becoming a $d+1$-dimensional vector together.
+- `NLE_gauss` is the contiuum Gaussian distribution version of `NLE`.
 - `NLE_cons` calculates $m_1^2$, the term that's always positive and doesn't affect the optimization problem. For large $N$, it would make sense to modify the code such that this is calculated only once.
 - `NLE_pos` and `NLE_acc_pos` come in handy if you want to calculate the non-negative version of the NLE, e.g. for a log-log plot.
 - `obstacle` calculates how much cost is incurred by the current trajectory with respect to one circular obstacle.
 
-The following notebooks were written in Google Colab, so if you appropriately edit the variable `DRIVE_PATH` and have the file `BlobOT.py` in the correct place, every experiment should be reproducible in either Google Colab or your local machine. Every figure, npz and pkl file created by this repo should be in the `output` folder. If any are missing (such as small_eps_230526.npz), it's because the file was too large for github. 
+The following notebooks were written in Google Colab, so if you appropriately edit the variable `DRIVE_PATH` and have the file `BlobOT.py` in the correct place, every experiment should be reproducible in either Google Colab or your local machine. Every figure, npz and pkl file created by this repo should be in the `output` folder. If any are missing (such as small_eps_{date}.npz), it's because the file was too large for github. 
 - `loss_contour.ipynb`
 - `diff_eps.ipynb`: This may produce a different output due to randomness, but it should be qualitatively the same.
 - `small_eps.ipynb`: Run this file *after* `diff_eps.ipynb` because this uses the same source and target distributions as the previous experiment.
 - `delta_scaling.ipynb`
+- `POT_comparison.ipynb`: This may produce a different output due to randomness.
 - `continuum_gaussian.ipynb`: The empirical distribution version may produce a different output due to randomness.
 - `obstacles.ipynb`
 - `acceleration.ipynb`: The shuffled velocity experiment may produce a different output due to randomness.
