@@ -4,7 +4,7 @@ Python code for the paper ..... by **Katy Craig**, **Karthik Elamvazhuthi**, and
 
 ## What's inside?
 
-`BlobOT.py` contains the most important class and function definitions for the optimization problem. These are imported 
+`BlobOT.py` contains the most important class and function definitions for the optimization problem. 
 - `Model` is (more or less) a dummy class so that we can leverage the autograd functionality of Pytorch. 
 - `KE` calculates the kinetic energy using **velocity** of the trajectories.
 - `KE_acc` uses the **acceleration** of trajectories.
