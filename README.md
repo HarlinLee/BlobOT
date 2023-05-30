@@ -8,7 +8,8 @@ Python code for the paper ..... by **Katy Craig**, **Karthik Elamvazhuthi**, and
 - `Model` is (more or less) a dummy class so that we can leverage the autograd functionality of Pytorch. 
 - `KE` calculates the kinetic energy using **velocity** of the trajectories.
 - `KE_acc` uses the **acceleration** of trajectories.
-- Use `NLE` to calcualte the non-local energy term (without $m_1^2$, so this may be negative) when the target distribution is empirical distribution. We assume equal weights per particle, but that should be easily modifiable if you need to.
+- Use `NLE` to calcualte the non-local energy term (without $m_1^2$, so this may be negative) when the target distribution is an empirical distribution. We assume equal weights per particle, but that should be easily modifiable if you need to.
+- `NLE_gauss` is the contiuum Gaussian distribution version of `NLE`.
 - `NLE_acc` is for the acceleration control example. It needs special treatment to deal with position and velocity becoming a $d+1$-dimensional vector together.
 - `NLE_cons` calculates $m_1^2$, the term that's always positive and doesn't affect the optimization problem. For large $N$, it would make sense to modify the code such that this is calculated only once.
 - `NLE_pos` and `NLE_acc_pos` come in handy if you want to calculate the non-negative version of the NLE, e.g. for a log-log plot.
