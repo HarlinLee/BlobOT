@@ -56,7 +56,7 @@ def KE_acc(traj, z_tensor, params):
   acc = torch.diff(V, dim=-1) # accerlation
   l2_val = torch.sum(torch.pow(acc, 2))
 
-  return l2_val/(params['dt']**2)/params['N']
+  return l2_val/(params['dt']**3)/params['N']
 
 def NLE_gauss(traj, w_tensor, params):
   dist_y = torch.cdist(traj[:, :, -1], traj[:, :, -1])
