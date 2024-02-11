@@ -43,6 +43,11 @@ def mollify(delta, x, d):
   return torch.exp(-torch.pow(x, 2)/(2*delta**2))/torch.pow(2*np.pi*(delta**2), torch.as_tensor(d/2))
 
 
+
+
+
+
+# Kinetic energy (velocity^2)
 def KE(traj, z_tensor, params):
   V = torch.diff(traj, dim=-1)
   l2_val = torch.sum(torch.pow(V, 2))
@@ -50,14 +55,7 @@ def KE(traj, z_tensor, params):
 
   return l2_val/params['dt']/params['N']
 
-def KE_acc(traj, z_tensor, params):
-  X = torch.cat((z_tensor, traj), dim=-1) # add the first two time steps back
-  V = torch.diff(X, dim=-1) # velocity
-  acc = torch.diff(V, dim=-1) # accerlation
-  l2_val = torch.sum(torch.pow(acc, 2))
-
-  return l2_val/(params['dt']**3)/params['N']
-
+# Nonlocal energy (continuum Gaussian)
 def NLE_gauss(traj, w_tensor, params):
   dist_y = torch.cdist(traj[:, :, -1], traj[:, :, -1])
   reg_val = mollify(params['delta'], dist_y, params['d']).mean()
@@ -67,6 +65,7 @@ def NLE_gauss(traj, w_tensor, params):
   
   return reg_val/params['eps']
 
+# Nonlocal energy (sum of diracs)
 def NLE(traj, w_tensor, params):
   d = w_tensor.shape[-1]
 
@@ -78,6 +77,24 @@ def NLE(traj, w_tensor, params):
   
   return reg_val/params['eps']
 
+def NLE_pos(traj, w_tensor, params):
+  return NLE(traj, w_tensor, params) + NLE_cons(w_tensor, params)
+
+
+
+
+
+
+# Kinetic energy (acceleration^2)
+def KE_acc(traj, z_tensor, params):
+  X = torch.cat((z_tensor, traj), dim=-1) # add the first two time steps back
+  V = torch.diff(X, dim=-1) # velocity
+  acc = torch.diff(V, dim=-1) # accerlation
+  l2_val = torch.sum(torch.pow(acc, 2))
+
+  return l2_val/(params['dt']**3)/params['N']
+
+# Nonlocal energy (for acceleration control)
 def NLE_acc(traj, w_tensor, params):
   x1 = traj[:, :, -1]
   v1 = (traj[:, :, -1] - traj[:, :, -2])/params['dt']
@@ -93,22 +110,34 @@ def NLE_acc(traj, w_tensor, params):
   
   return reg_val/params['eps']
 
+def NLE_acc_pos(traj, w_tensor, params):
+  return NLE_acc(traj, w_tensor, params) + NLE_cons(w_tensor, params)
+
+
+
+
+
+
+# Constant term of nonlocal energy
 def NLE_cons(w_tensor, params):
   dist_w = torch.cdist(w_tensor, w_tensor)
   reg_val = mollify(params['delta'], dist_w, w_tensor.shape[-1]).mean()
 
   return reg_val/params['eps']
 
-def NLE_acc_pos(traj, w_tensor, params):
-  return NLE_acc(traj, w_tensor, params) + NLE_cons(w_tensor, params)
 
-def NLE_pos(traj, w_tensor, params):
-  return NLE(traj, w_tensor, params) + NLE_cons(w_tensor, params)
+
+
+
 
 def obstacle(traj, center, r, params):
   o_val = r**2 - torch.sum(torch.pow(traj - center, 2), dim=1)
   o_val = torch.mean(torch.maximum(o_val, torch.zeros_like(o_val)))
   return o_val/params['eps_obst']
+
+
+
+
 
 def endpoint_cost(y, w):
   N = y.shape[0]
@@ -120,6 +149,9 @@ def allpoint_cost(X, w):
   N = X.shape[0]
   w0 = draw_straight_lines(z, w, L+1)
   return np.sqrt(np.sum((X[:, :, 1:] - w0)**2)/L/N)
+
+
+
 
 def draw_straight_lines(start, end, num):
   X0 = np.linspace(start, end, num=num, endpoint=True)
