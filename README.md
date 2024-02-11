@@ -1,6 +1,6 @@
 # BlobOT
 
-Python code for the paper **A Blob Method for Dynamic Optimal Transport with State and Control Constraints** by **Katy Craig**, **Karthik Elamvazhuthi**, and **Harlin Lee**.
+Python code for the paper **A Blob Method for Mean Field Control with Terminal Constraints** by **Katy Craig**, **Karthik Elamvazhuthi**, and **Harlin Lee**.
 
 
 <img src="./output/obstacles/obstacles.gif"  width="500" height="500">
