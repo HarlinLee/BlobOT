@@ -19,7 +19,7 @@ Python code for the paper **A Blob Method for Dynamic Optimal Transport with Sta
 - `NLE_pos` and `NLE_acc_pos` come in handy if you want to calculate the non-negative version of the NLE, e.g. for a log-log plot.
 - `obstacle` calculates how much cost is incurred by the current trajectory with respect to one circular obstacle.
 
-The following notebooks were written in Google Colab, so if you appropriately edit the variable `DRIVE_PATH` and have the file `BlobOT.py` in the correct place, every experiment should be reproducible in either Google Colab or your local machine. Every figure, npz and pkl file created by this repo should be in the `output` folder. If any are missing (such as small_eps_{date}.npz), it's because the file was too large for github. 
+The following notebooks can be run after cloning this repo and installing Pytorch. Every figure, npz and pkl file created by this repo should be in the `output` folder. If any are missing (such as small_eps_{date}.npz), it's because the file was too large for github. 
 - `loss_contour.ipynb`
 - `diff_eps.ipynb`: This may produce a different output due to randomness, but it should be qualitatively the same.
 - `small_eps.ipynb`: Run this file *after* `diff_eps.ipynb` because this uses the same source and target distributions as the previous experiment.
@@ -35,15 +35,4 @@ Helpful tips:
 - `y` denotes $x(1)$, i.e. particle positions at $t=1$.
 - Even though we use the method `torch.optim.SGD`, it's actually GD and not SGD.
 - `X0` and `X` inside the model is of length $L = 1/\Delta t$ in the time dimension and does **not** include $z = x(0)$. They're of the shape $N \times d \times L$, or `particles` x `dimension` x `time steps`.
-- There's a lot of code about `torch.device` for GPU, but I didn't actually end up using it, so it's likely buggy in its current form.
 - The use of npz vs. pkl is pretty random.
-- If your code is hanging at the start of the plotting code, it's probably because of this code block, which is repeated from the first cell. You can comment it out if you're running the whole thing in one go.
-```
-from google.colab import drive
-import os
-drive.mount('/content/drive')
-DRIVE_PATH = "/content/drive/MyDrive/BlobOT-final"
-
-import sys
-sys.path.insert(0, DRIVE_PATH)
-```
